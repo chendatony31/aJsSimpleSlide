@@ -59,20 +59,22 @@ window.onload = function(){
 	pagerLi[0].className = "pager_li selected";
 	timer = setInterval(rolling,3000);
 	function rolling(){
-		var nowTop = slides.style.top || "0px";
-		var nowTopNum = nowTop.slice(0,-2);
-		var num = slideArr.length;
-		//nowTopNum = nowTopNum <= -(num-1)*80? 80 : nowTopNum;
-		var finalTopNum = nowTopNum <= -(num-1)*80? 0 : nowTopNum-80;
-		//var finalTopNum = nowTopNum - 80;
-		var tmpIndex = finalTopNum/(-80);
-		var pagerLi = pagerUl.getElementsByTagName('li');
-		for(var i = 0; i< pagerLi.length;i++){
-				pagerLi[i].className = "pager_li";
-			}
-		pagerLi[tmpIndex].className='pager_li selected';
-		finalTop = finalTopNum + 'px';
-		rollingTo(nowTopNum, finalTopNum);
+		if(!isRolling){
+			var nowTop = slides.style.top || "0px";
+			var nowTopNum = nowTop.slice(0,-2);
+			var num = slideArr.length;
+			//nowTopNum = nowTopNum <= -(num-1)*80? 80 : nowTopNum;
+			var finalTopNum = nowTopNum <= -(num-1)*80? 0 : nowTopNum-80;
+			//var finalTopNum = nowTopNum - 80;
+			var tmpIndex = finalTopNum/(-80);
+			var pagerLi = pagerUl.getElementsByTagName('li');
+			for(var i = 0; i< pagerLi.length;i++){
+					pagerLi[i].className = "pager_li";
+				}
+			pagerLi[tmpIndex].className='pager_li selected';
+			finalTop = finalTopNum + 'px';
+			rollingTo(nowTopNum, finalTopNum);
+		}
 	}
 	function rollingTo(startPos, endPos){
 		isRolling = true;
