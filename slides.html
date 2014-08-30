@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<style>
+		body{font-family:'Microsoft Yahei';}
+		html,body,ul, li, a{ padding:0; margin:0;list-style: none;}
+		li{display: block;}
+		#slideCont{ width: 950px; height:80px; position: relative; overflow: hidden}
+		#slides{ position: absolute; list-style: none;top:0px;}
+		#slides li{ height:80px;}
+		#slides img{ height:80px; width: 100%;}
+		.pager_ul{ position: absolute; bottom: 4px; right: 4px; list-style: none;}
+		.pager_li{ width:16px; font-size: 11px; height: 16px; text-align: center; margin:0 2px; float: left;background: #ddd; background: rgba(255,255,255,0.5); color:#333;cursor:pointer;}
+		.pager_li:hover{ background: orange; background: rgba(255,102,0,0.5); color:white;}
+		.selected{ background: orange; background: rgba(255,102,0,0.5); color:white; }
+	</style>
+</head>
+<body>
+<div id="slideCont">
+	<ul id="slides">
+		<li><a href=""><img src="images/1.gif" /></a></li>
+		<li><a href=""><img src="images/2.gif" /></a></li>
+		<li><a href=""><img src="images/3.gif" /></a></li>
+		<li><a href=""><img src="images/4.gif" /></a></li>
+	</ul>
+</div>
+<script>
+window.onload = function(){
+	var slideCont = document.getElementById('slideCont');
+	var slides = document.getElementById('slides');
+	var slideArr = slides.getElementsByTagName('li');
+	var pagerUl = document.createElement('ul');
+	var isRolling = false;
+	pagerUl.className="pager_ul"
+	slideCont.appendChild(pagerUl);
+	for(var i=0;i<slideArr.length; i++){
+		var tmpLi =  document.createElement('li');
+		tmpLi.innerHTML=i+1;
+		tmpLi.value=i;
+		tmpLi.className="pager_li";
+		pagerUl.appendChild(tmpLi);
+		tmpLi.onclick=function(e){
+			if(!isRolling){
+				var index = e.target.value;
+				var pagerLi = pagerUl.getElementsByTagName('li');
+				for(var i = 0; i< pagerLi.length;i++){
+					pagerLi[i].className = "pager_li";
+				}
+				e.target.className='pager_li selected';
+				var nowTop = slides.style.top || "0px";
+				var nowTopNum = nowTop.slice(0,-2);
+				var finalTopNum = -index*80;
+				rollingTo(nowTopNum, finalTopNum);
+			}
+		}
+	}
+	var pagerLi = pagerUl.getElementsByTagName('li');
+	pagerLi[0].className = "pager_li selected";
+	timer = setInterval(rolling,3000);
+	function rolling(){
+		var nowTop = slides.style.top || "0px";
+		var nowTopNum = nowTop.slice(0,-2);
+		var num = slideArr.length;
+		//nowTopNum = nowTopNum <= -(num-1)*80? 80 : nowTopNum;
+		var finalTopNum = nowTopNum <= -(num-1)*80? 0 : nowTopNum-80;
+		//var finalTopNum = nowTopNum - 80;
+		var tmpIndex = finalTopNum/(-80);
+		var pagerLi = pagerUl.getElementsByTagName('li');
+		for(var i = 0; i< pagerLi.length;i++){
+				pagerLi[i].className = "pager_li";
+			}
+		pagerLi[tmpIndex].className='pager_li selected';
+		finalTop = finalTopNum + 'px';
+		rollingTo(nowTopNum, finalTopNum);
+	}
+	function rollingTo(startPos, endPos){
+		isRolling = true;
+		startPos = startPos*1;
+		endPos= endPos *1;
+		var part = (endPos - startPos)/20;
+		var tmpTop = startPos;
+		var timer2 = setInterval(move,30);
+		function move(){
+			tmpTop += part;
+			slides.style.top = tmpTop + "px";
+			if(tmpTop == endPos){ clearInterval(timer2),isRolling = false }
+		}
+	}
+}
+</script>
+</body>
+</html>
