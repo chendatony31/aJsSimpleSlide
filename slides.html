@@ -40,14 +40,16 @@ window.onload = function(){
 		tmpLi.value=i;
 		tmpLi.className="pager_li";
 		pagerUl.appendChild(tmpLi);
-		tmpLi.onclick=function(e){
+		tmpLi.onclick=function(event){
 			if(!isRolling){
-				var index = e.target.value;
+				var e = event || window.event; 
+				var eTarget = e.srcElement || e.target;
+				var index = eTarget.value;
 				var pagerLi = pagerUl.getElementsByTagName('li');
 				for(var i = 0; i< pagerLi.length;i++){
 					pagerLi[i].className = "pager_li";
 				}
-				e.target.className='pager_li selected';
+				eTarget.className='pager_li selected';
 				var nowTop = slides.style.top || "0px";
 				var nowTopNum = nowTop.slice(0,-2);
 				var finalTopNum = -index*80;
